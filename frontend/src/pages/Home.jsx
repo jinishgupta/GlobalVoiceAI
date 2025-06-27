@@ -34,7 +34,7 @@ function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
             <button onClick={handleStart} className="bg-primary text-white px-8 py-3 rounded-lg font-semibold text-lg shadow-lg hover:bg-primary/90 transition">Start Localizing Now</button>
-            <button className="border-2 border-primary text-primary px-8 py-3 rounded-lg font-semibold text-lg hover:bg-primary hover:text-white transition">Watch Demo</button>
+            <button className="border-2 border-primary text-primary px-8 py-3 rounded-lg font-semibold text-lg hover:bg-primary hover:text-white transition" onClick={() => navigate('/examples')}>Watch Demo</button>
           </div>
           {/* Animated process illustration placeholder */}
           <div className="w-full h-56 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl flex items-center justify-center text-text-muted text-xl shadow-inner mb-4">
@@ -43,12 +43,12 @@ function Home() {
                 <span className="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold mb-2">1</span>
                 <span className="text-text-main font-semibold">Upload</span>
               </span>
-              <span className="text-3xl text-primary">→</span>
+              <span className="text-3xl mb-9 text-primary">→</span>
               <span className="flex flex-col items-center">
                 <span className="bg-secondary text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold mb-2">2</span>
                 <span className="text-text-main font-semibold">Localize</span>
               </span>
-              <span className="text-3xl text-secondary">→</span>
+              <span className="text-3xl mb-9 text-secondary">→</span>
               <span className="flex flex-col items-center">
                 <span className="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold mb-2">3</span>
                 <span className="text-text-main font-semibold">Export</span>

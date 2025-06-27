@@ -120,7 +120,7 @@ function Pricing() {
       </div>
 
       {/* FAQ Section */}
-      <div className="py-24 bg-white">
+      <div id="faq" className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4">
           <h2 className="text-4xl font-extrabold text-gray-900 mb-12 text-center">
             Frequently Asked Questions

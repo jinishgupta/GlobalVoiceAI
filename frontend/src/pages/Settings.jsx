@@ -66,28 +66,28 @@ const Settings = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-8 bg-white rounded-xl shadow mt-10">
-      <h1 className="text-2xl font-bold mb-8 text-gray-800">Settings</h1>
+    <div className="max-w-2xl mx-auto p-8 rounded-xl">
+      <h1 className="text-3xl font-bold mb-8 text-gray-900">Settings</h1>
       {/* Profile Section */}
-      <form onSubmit={handleProfileSubmit} className="mb-10">
-        <div className="flex items-center gap-6 mb-6">
-          <div className="relative w-20 h-20">
+      <form onSubmit={handleProfileSubmit} className="mb-10 bg-white rounded-2xl p-6 shadow">
+        <div className="flex items-center gap-8 mb-6">
+          <div className="relative w-28 h-28">
             {previewUrl ? (
-              <img src={previewUrl} alt="Profile" className="w-20 h-20 rounded-full object-cover border-2 border-vibrant-blue" />
+              <img src={previewUrl} alt="Profile" className="w-28 h-28 rounded-full object-cover border-4 border-indigo-500 shadow" />
             ) : profile?.userName ? (
-              <div className="w-20 h-20 rounded-full bg-vibrant-blue flex items-center justify-center text-white text-3xl font-bold">
+              <div className="w-28 h-28 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-4xl font-bold shadow">
                 {getInitials(profile.userName)}
               </div>
             ) : (
-              <UserCircle2 className="w-20 h-20 text-gray-300" />
+              <UserCircle2 className="w-28 h-28 text-gray-300" />
             )}
             <button
               type="button"
-              className="absolute bottom-0 right-0 bg-white border border-gray-200 rounded-full p-2 shadow hover:bg-gray-100"
+              className="absolute bottom-2 right-2 bg-white border border-gray-200 rounded-full p-2 shadow hover:bg-gray-100"
               onClick={() => fileInputRef.current.click()}
               title="Change profile picture"
             >
-              <Camera className="w-5 h-5 text-vibrant-blue" />
+              <Camera className="w-6 h-6 text-indigo-500" />
             </button>
             <input
               type="file"
@@ -102,7 +102,7 @@ const Settings = () => {
               <label className="block text-gray-600 font-semibold mb-1">Username</label>
               <input
                 type="text"
-                className="border rounded px-3 py-2 w-56 focus:ring-vibrant-blue focus:border-vibrant-blue"
+                className="border rounded px-3 py-2 w-56 focus:ring-indigo-500 focus:border-indigo-500"
                 value={userName}
                 onChange={e => setUserName(e.target.value)}
                 required
@@ -122,7 +122,7 @@ const Settings = () => {
         {updateProfileError && <div className="text-red-500 mb-2">{updateProfileError}</div>}
         <button
           type="submit"
-          className="bg-vibrant-blue text-white px-6 py-2 rounded font-semibold hover:bg-vibrant-orange transition-colors"
+          className="bg-gradient-to-r from-indigo-500 to-violet-600 text-white px-6 py-2 rounded font-semibold hover:from-violet-600 hover:to-indigo-500 transition-colors shadow"
           disabled={updateProfileLoading}
         >
           {updateProfileLoading ? 'Saving...' : 'Save Changes'}
@@ -130,13 +130,13 @@ const Settings = () => {
       </form>
 
       {/* Password Section */}
-      <form onSubmit={handlePasswordSubmit} className="bg-gray-50 rounded-lg p-6 border">
-        <h2 className="text-lg font-bold mb-4 text-gray-700">Change Password</h2>
+      <form onSubmit={handlePasswordSubmit} className="bg-white rounded-2xl p-6 shadow">
+        <h2 className="text-lg font-bold mb-4 text-gray-900">Change Password</h2>
         <div className="mb-4">
           <label className="block text-gray-600 font-semibold mb-1">Current Password</label>
           <input
             type="password"
-            className="border rounded px-3 py-2 w-full focus:ring-vibrant-blue focus:border-vibrant-blue"
+            className="border rounded px-3 py-2 w-full focus:ring-indigo-500 focus:border-indigo-500"
             value={currentPassword}
             onChange={e => setCurrentPassword(e.target.value)}
             required
@@ -146,7 +146,7 @@ const Settings = () => {
           <label className="block text-gray-600 font-semibold mb-1">New Password</label>
           <input
             type="password"
-            className="border rounded px-3 py-2 w-full focus:ring-vibrant-blue focus:border-vibrant-blue"
+            className="border rounded px-3 py-2 w-full focus:ring-indigo-500 focus:border-indigo-500"
             value={newPassword}
             onChange={e => setNewPassword(e.target.value)}
             required
@@ -156,7 +156,7 @@ const Settings = () => {
           <label className="block text-gray-600 font-semibold mb-1">Confirm New Password</label>
           <input
             type="password"
-            className="border rounded px-3 py-2 w-full focus:ring-vibrant-blue focus:border-vibrant-blue"
+            className="border rounded px-3 py-2 w-full focus:ring-indigo-500 focus:border-indigo-500"
             value={confirmPassword}
             onChange={e => setConfirmPassword(e.target.value)}
             required
@@ -169,7 +169,7 @@ const Settings = () => {
         {passwordChangeSuccess && <div className="text-green-600 mb-2">{passwordChangeSuccess}</div>}
         <button
           type="submit"
-          className="bg-vibrant-blue text-white px-6 py-2 rounded font-semibold hover:bg-vibrant-orange transition-colors"
+          className="bg-gradient-to-r from-indigo-500 to-violet-600 text-white px-6 py-2 rounded font-semibold hover:from-violet-600 hover:to-indigo-500 transition-colors shadow"
           disabled={passwordChangeLoading || newPassword !== confirmPassword}
         >
           {passwordChangeLoading ? 'Changing...' : 'Change Password'}

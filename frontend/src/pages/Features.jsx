@@ -27,15 +27,15 @@ const features = [
       <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 16v-2m8-6h2m-18 0h2m14.485-6.485l1.414-1.414M4.1 19.9l1.414-1.414m12.97-1.414l1.414 1.414M5.515 5.515l-1.414-1.414M12 18a6 6 0 100-12 6 6 0 000 12z"/></svg>
     ),
     title: 'Voice Customization',
-    desc: 'Adjust pitch, speed, emphasis, and pronunciation for every segment and language.'
+    desc: 'Adjust pitch, speed, emphasis, and pronunciation for every segment and language during TTS.'
   },
   {
     icon: (
       <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
     ),
-    title: 'Script & Segment Editor',
-    desc: 'Edit translations, scripts, and segment timing with a powerful, intuitive editor.'
-  },
+    title: 'Text to Speech',
+  desc: 'Convert text to natural-sounding speech with advanced AI voice synthesis.'
+ },
   {
     icon: (
       <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
@@ -72,31 +72,6 @@ function Features() {
             </div>
           ))}
         </div>
-        
-        <div className="bg-white rounded-xl shadow-lg p-10 mb-20">
-          <h2 className="text-3xl font-bold text-text-main text-center mb-8">Interactive Demo</h2>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-10">
-            <div className="w-full md:w-1/2">
-              <h3 className="text-2xl font-semibold text-text-main mb-4">Try Our MultiNative Voices</h3>
-              <p className="text-text-muted mb-6">Select a voice to hear how our AI maintains a consistent, natural tone across languages. This is the power of our MultiNative technology.</p>
-              <div className="flex flex-col gap-3">
-                {demoVoices.map((v, i) => (
-                  <button
-                    key={v.name}
-                    className={`px-6 py-3 rounded-lg font-semibold border-2 text-left ${selectedVoice === i ? `bg-${v.color} text-white border-${v.color}` : 'bg-base-bg text-text-main border-divider'} transition-all duration-300 transform hover:scale-105`}
-                    onClick={() => setSelectedVoice(i)}
-                  >
-                    {v.name} <span className="ml-2 text-xs opacity-70">({v.style})</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="w-full md:w-1/2 h-48 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg flex items-center justify-center text-text-muted text-lg shadow-inner">
-              <span className="text-2xl font-medium">"Hello, welcome to GlobalVoice AI!"</span>
-            </div>
-          </div>
-        </div>
-
         <div className="text-center">
           <h2 className="text-3xl font-bold text-text-main mb-8">GlobalVoice AI vs. Traditional Localization</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">

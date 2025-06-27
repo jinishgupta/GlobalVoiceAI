@@ -134,41 +134,47 @@ const Dashboard = () => {
     return dateB - dateA;
   });
 
-  // Calculate stats from userJobs
-  const projectsInProgress = userJobs.filter(job => job.status === 'PROCESSING' || job.status === 'PENDING').length;
-  const projectsCompleted = userJobs.filter(job => job.status === 'COMPLETED').length;
+  // Calculate stats from userJobs and ttsJobs
+  const allProjects = [...userJobs, ...ttsJobs];
+  const projectsInProgress = allProjects.filter(job => job.status === 'PROCESSING' || job.status === 'PENDING').length;
+  const projectsCompleted = allProjects.filter(job => job.status === 'COMPLETED').length;
 
   const stats = [
-    { name: 'Total Projects', value: userJobs.length, unit: 'Projects', icon: <Layers size={24} className="text-vibrant-blue" />, color: 'text-vibrant-blue' },
+    { name: 'Total Projects', value: allProjects.length, unit: 'Projects', icon: <Layers size={24} className="text-vibrant-blue" />, color: 'text-vibrant-blue' },
     { name: 'In Progress', value: projectsInProgress, unit: 'Projects', icon: <Clock size={24} className="text-vibrant-orange" />, color: 'text-vibrant-orange' },
     { name: 'Completed', value: projectsCompleted, unit: 'Projects', icon: <Check size={24} className="text-green-500" />, color: 'text-green-500' },
   ];
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-            <div>
-                 <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-                 <p className="text-gray-600 mt-1">Welcome back, {user?.userName || 'User'}! Here's a snapshot of your activity.</p>
-            </div>
-            <Link to="/new-project" className="mt-4 md:mt-0 bg-vibrant-blue text-white px-5 py-3 rounded-lg font-semibold flex items-center hover:bg-vibrant-orange transition-colors shadow-sm">
-                 + Create New Project
-            </Link>
-         </header>
+    <div className="p-8 min-h-screen bg-blue-50">
+      <div className="max-w-5xl mx-auto">
+        <header className="mb-10">
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">Dashboard</h1>
+          <p className="text-gray-500">Welcome back, {user?.userName || 'User'}! Here's a snapshot of your activity.</p>
+        </header>
 
         {/* Stats Cards */}
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
              {stats.map(stat => (
-                  <StatCard key={stat.name} {...stat} />
+                  <div className="bg-white p-6 rounded-2xl shadow flex items-center gap-4">
+                    <div className="p-3 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow">
+                      {stat.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500">{stat.name}</h3>
+                      <p className="text-2xl font-bold text-gray-800 mt-1">
+                        {stat.value} <span className="text-base font-medium text-gray-500">{stat.unit}</span>
+                      </p>
+                    </div>
+                  </div>
              ))}
          </div>
 
         {/* Recent Projects */}
         <section>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-semibold text-gray-700">Recent Projects</h2>
-            <Link to="/projects" className="text-sm font-semibold text-vibrant-blue hover:underline">
+            <h2 className="text-xl font-bold text-gray-900">Recent Projects</h2>
+            <Link to="/projects" className="text-sm font-semibold text-indigo-600 hover:underline">
               View All
             </Link>
           </div>
@@ -185,11 +191,11 @@ const Dashboard = () => {
                 )}
               </div>
             ) : (
-                <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-                    <BarChart2 size={48} className="mx-auto text-gray-300" />
+                <div className="text-center py-12 bg-white rounded-2xl shadow">
+                    <svg width="80" height="80" fill="none" viewBox="0 0 24 24" className="mx-auto mb-4 text-indigo-200"><path fill="currentColor" d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
                     <h3 className="mt-4 text-xl font-semibold text-gray-800">No Projects Yet</h3>
                     <p className="mt-1 text-gray-500">Get started by creating your first project.</p>
-                    <Link to="/new-project" className="mt-6 inline-block px-6 py-2 bg-vibrant-blue text-white rounded-lg font-semibold hover:bg-vibrant-orange transition-colors">
+                    <Link to="/new-project" className="mt-6 inline-block px-6 py-2 bg-gradient-to-r from-indigo-500 to-violet-600 text-white rounded-lg font-semibold hover:from-violet-600 hover:to-indigo-500 transition-colors">
                         Create Project
                     </Link>
                 </div>

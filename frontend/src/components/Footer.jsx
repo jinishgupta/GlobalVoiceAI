@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function Footer() {
   return (
     <footer className="bg-base-bg-alt border-t border-divider text-text-muted text-sm mt-8">
@@ -23,14 +25,14 @@ function Footer() {
           <div className="font-semibold text-text-main mb-2">Resources</div>
           <ul className="space-y-1">
             <li><a href="/blog" className="hover:text-primary">Blog</a></li>
-            <li><a href="/faq" className="hover:text-primary">FAQ</a></li>
+            <li><Link to="/pricing#faq" className="hover:text-primary">FAQ</Link></li>
           </ul>
         </div>
         <div>
           <div className="font-semibold text-text-main mb-2">Legal</div>
           <ul className="space-y-1">
-            <li><a href="/privacy" className="hover:text-primary">Privacy Policy</a></li>
-            <li><a href="/terms" className="hover:text-primary">Terms of Service</a></li>
+            <li className="hover:text-primary hover:cursor-pointer">Privacy Policy</li>
+            <li className="hover:text-primary hover:cursor-pointer">Terms of Service</li>
           </ul>
         </div>
       </div>
