@@ -1,152 +1,166 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faBookOpen, faBullhorn, faBriefcase, faPodcast } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
+import example from '../assets/example.avif';
 
-const industryIcons = {
-  'E-Learning': <FontAwesomeIcon icon={faBookOpen} className="w-8 h-8" />,
-  'Marketing': <FontAwesomeIcon icon={faBullhorn} className="w-8 h-8" />,
-  'Corporate': <FontAwesomeIcon icon={faBriefcase} className="w-8 h-8" />,
-  'Media': <FontAwesomeIcon icon={faPodcast} className="w-8 h-8" />,
-};
-
-const samples = [
+const faqs = [
   {
-    title: 'E-Learning Module: Global Onboarding',
-    industry: 'E-Learning',
-    desc: 'An employee onboarding course localized into three languages using our "Aria" and "Sofia" voices to maintain a consistent, welcoming tone.',
-    imageUrl: 'https://images.unsplash.com/photo-1542744095-291d1f67b221?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+    q: 'What are the supported input formats?',
+    a: 'The API accepts the following input audio formats: WAV, MP3, ALAW, ULAW, FLAC.'
   },
   {
-    title: 'Product Launch Ad Campaign',
-    industry: 'Marketing',
-    desc: 'A high-energy video ad for a new tech gadget, dubbed into Japanese and German with our "Kenji" and "Leo" voices for maximum impact.',
-    imageUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
+    q: 'What are the supported output formats?',
+    a: 'WAV (Default), MP3, FLAC, ALAW, and ULAW. The endpoint offers the same range of sample rates and channel types as the Speech Synthesis endpoint.'
   },
   {
-    title: 'Internal Corporate Training',
-    industry: 'Corporate',
-    desc: 'A mandatory compliance training module for a multinational corporation, made accessible to teams in Brazil and India using our platform.',
-    imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+    q: 'What is the input file limit?',
+    a: 'The maximum input file length is 1 minute. If "retain prosody" is set to true and "retain accent" is set to false, the limit is 35 seconds.'
   },
   {
-    title: 'Podcast Expansion Project',
-    industry: 'Media',
-    desc: 'An English-language true crime podcast dubbed into Spanish to reach the fast-growing Latin American listener market.',
-    imageUrl: 'https://images.unsplash.com/photo-1590602847923-44d039755b44?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+    q: 'Can I get a transcript of the audio?',
+    a: 'Yes! If you enable the "return transcription" option, a transcript will be generated for you.'
+  },
+  {
+    q: 'Can I edit the transcription?',
+    a: 'Yes, you can manually edit the transcription. However, manual transcription input will not work if both "retain prosody" and "retain accent" are set to true.'
   },
 ];
 
-const caseStudies = [
-  {
-    quote: 'With GlobalVoice AI, we launched our online courses in four new languages in just a matter of days. The process was seamless, affordable, and the quality was outstanding.',
-    name: 'Maria Gonzalez',
-    title: 'CEO, LearnX',
-    imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-  {
-    quote: 'Our marketing team can now create authentic, localized ad campaigns for every target region without the logistical nightmare of hiring local voice actors. It\'s been a complete game-changer for our global strategy.',
-    name: 'James Lee',
-    title: 'CMO, AdVantage Global',
-    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-  },
-];
+const accentGradient = "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400";
+const accentText = "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 bg-clip-text text-transparent";
 
-const examples = [
-  {
-    title: 'E-Learning Course Localization',
-    category: 'Education',
-    description: 'An engaging e-learning module about renewable energy, originally in English, has been seamlessly translated and dubbed into Spanish and Mandarin. The AI voice maintains a professional and educational tone, making complex topics accessible to a global audience.',
-    imageUrl: 'https://picsum.photos/seed/example1/800/600',
-    tags: ['E-Learning', 'Spanish', 'Mandarin', 'Voice Cloning'],
-  },
-  {
-    title: 'Marketing Video for a Global Brand',
-    category: 'Marketing',
-    description: 'This promotional video for a new tech gadget was adapted for the French and Japanese markets. GlobalVoice AI not only translated the script but also adjusted the timing to match on-screen graphics and action, using a high-energy, persuasive voice style.',
-    imageUrl: 'https://picsum.photos/seed/example2/800/600',
-    tags: ['Advertising', 'French', 'Japanese', 'Video Dubbing'],
-  },
-  {
-    title: 'Corporate Training Video Translation',
-    category: 'Corporate',
-    description: 'A mandatory compliance training video was localized for a multinational corporation\'s offices in Germany and Brazil. The AI-generated voiceover is clear, authoritative, and perfectly synchronized, ensuring a consistent training experience for all employees.',
-    imageUrl: 'https://picsum.photos/seed/example3/800/600',
-    tags: ['Training', 'German', 'Portuguese', 'Synchronization'],
-  },
-  {
-    title: 'Indie Game Character Dialogue',
-    category: 'Entertainment',
-    description: 'We generated unique and emotive voices for five different characters in an independent RPG, translating the dialogue from English to Korean. Each character has a distinct personality, bringing the game\'s story to life for a new market.',
-    imageUrl: 'https://picsum.photos/seed/example4/800/600',
-    tags: ['Gaming', 'Korean', 'Multi-Voice', 'Creative'],
-  }
-]
-
-function Examples() {
+export default function Examples() {
+  const [openFaq, setOpenFaq] = useState(null);
   return (
-    <div className="bg-white">
+    <div className="bg-blue-50 min-h-screen">
       {/* Hero Section */}
-      <div className="text-center py-20 px-4 bg-gray-50">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-4">
-          See What's Possible
-        </h1>
-        <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-          From global marketing campaigns to internal training modules, discover how creators and businesses are using GlobalVoice AI to speak to the world.
-        </p>
-      </div>
-
-      {/* Samples Showcase */}
-      <div className="max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-extrabold text-gray-900 mb-16 text-center">Our Work in Action</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {samples.map((sample) => (
-            <div key={sample.title} className="rounded-2xl shadow-lg overflow-hidden group">
-              <div className="relative">
-                <img className="h-64 w-full object-cover" src={sample.imageUrl} alt={sample.title} />
-                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                  <button className="w-24 h-24 rounded-full bg-vibrant-blue text-white flex items-center justify-center opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
-                    <FontAwesomeIcon icon={faPlay} className="w-10 h-10 ml-1" />
-                  </button>
-                </div>
-              </div>
-              <div className="p-8 bg-white">
-                <div className="flex items-center gap-4 mb-4">
-                   <div className="w-16 h-16 bg-vibrant-blue/10 text-vibrant-blue rounded-lg flex items-center justify-center">
-                    {industryIcons[sample.industry]}
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-vibrant-blue">{sample.industry}</p>
-                    <h3 className="text-2xl font-bold text-gray-900">{sample.title}</h3>
-                  </div>
-                </div>
-                <p className="text-gray-600">{sample.desc}</p>
-              </div>
-            </div>
-          ))}
+      <div className="relative bg-vibrant-blue text-white py-20">
+        <div className="absolute inset-0">
+          <img 
+            className="w-full h-full object-cover opacity-30" 
+            src={example} 
+            alt="AI global network" 
+          />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-lg">GlobalVoice AI Examples</h1>
+          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">See real-world demos of Murf API features: voice changing, speech customization, and more.</p>
         </div>
       </div>
-      
-      {/* Case Studies Section */}
-      <div className="bg-gray-50 py-24">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-extrabold text-gray-900 mb-16 text-center">Loved by Leading Brands</h2>
-          <div className="space-y-16">
-            {caseStudies.map((study) => (
-              <div key={study.name} className="text-center">
-                <img className="w-24 h-24 mx-auto rounded-full shadow-lg mb-4" src={study.imageUrl} alt={study.name} />
-                <blockquote className="text-2xl text-gray-800 italic leading-relaxed">
-                  <p>&ldquo;{study.quote}&rdquo;</p>
-                </blockquote>
-                <figcaption className="mt-6">
-                  <div className="font-bold text-gray-900 text-xl">{study.name}</div>
-                  <div className="text-gray-600">{study.title}</div>
-                </figcaption>
+      <div className="max-w-5xl mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16">
+        {/* Voice Changer Before & After */}
+        <section>
+          <h2 className={`text-3xl font-bold mb-6 ${accentText}`}>Voice Changer: Before & After</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white rounded-2xl shadow-lg border-2 border-indigo-200 p-6">
+              <span className="inline-block bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">Female Voice</span>
+              <h3 className="font-semibold mb-2">Original Audio</h3>
+              <audio controls src="https://murf.ai/public-assets/misc/example_audio/voice_changer/women_original_voice.mp3" />
+              <h3 className="font-semibold mt-6 mb-2">Converted (With Retain Prosody)</h3>
+              <audio controls src="https://murf.ai/public-assets/misc/example_audio/voice_changer/women_simw_voice.mp3" />
+            </div>
+            <div className="bg-white rounded-2xl shadow-lg border-2 border-violet-200 p-6">
+              <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">Male Voice</span>
+              <h3 className="font-semibold mb-2">Original Audio</h3>
+              <audio controls src="https://murf.ai/public-assets/misc/example_audio/voice_changer/man_original_voice.mp3" />
+              <h3 className="font-semibold mt-6 mb-2">Converted (With Retain Prosody & Accent)</h3>
+              <audio controls src="https://murf.ai/public-assets/misc/example_audio/voice_changer/man_VC.mp3" />
+            </div>
+          </div>
+        </section>
+        {/* Speech Customization Gallery */}
+        <section>
+          <h2 className={`text-3xl font-bold mb-6 ${accentText}`}>Speech Customization Gallery</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Styles Card */}
+            <div className="bg-white rounded-2xl shadow-lg border-2 border-pink-200 p-6 flex flex-col gap-6">
+              <span className="inline-block bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">Styles</span>
+              <div>
+                <p className="font-semibold mb-1">Sad</p>
+                <audio controls src="https://murf.ai/public-assets/misc/example_audio/voices/styles/ken-sad-1.wav" />
+              </div>
+              <div>
+                <p className="font-semibold mb-1">Angry</p>
+                <audio controls src="https://murf.ai/public-assets/misc/example_audio/voices/styles/ken-angry-1.wav" />
+              </div>
+            </div>
+            {/* Pronunciation Card */}
+            <div className="bg-white rounded-2xl shadow-lg border-2 border-yellow-200 p-6 flex flex-col gap-6">
+              <span className="inline-block bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">Pronunciation Correction</span>
+              <div>
+                <p className="font-semibold mb-1">wound (before)</p>
+                <audio controls src="https://murf.ai/public-assets/Blog/2023/010223/SubBlock_Wound_before_P.mp3" />
+              </div>
+              <div>
+                <p className="font-semibold mb-1">wound (after)</p>
+                <audio controls src="https://murf.ai/public-assets/Blog/2023/010223/Block_Wound.mp3" />
+              </div>
+            </div>
+            {/* MultiNative Card */}
+            <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-200 p-6 flex flex-col gap-6">
+              <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">MultiNative Demo</span>
+              <div>
+                <p className="font-semibold mb-1">Without MultiNative Locale</p>
+                <audio controls src="https://murf.ai/public-assets/misc/example_audio/voices/multi-native/natalie-croissant-en-US.wav" />
+              </div>
+              <div>
+                <p className="font-semibold mb-1">With MultiNative Locale</p>
+                <audio controls src="https://murf.ai/public-assets/misc/example_audio/voices/multi-native/natalie-croissant-fr-FR.wav" />
+              </div>
+            </div>
+            {/* Speed & Pitch Card */}
+            <div className="bg-white rounded-2xl shadow-lg border-2 border-purple-200 p-6 flex flex-col gap-6">
+              <span className="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">Speed & Pitch</span>
+              <div>
+                <p className="font-semibold mb-1">Default Speed</p>
+                <audio controls src="https://murf.ai/public-assets/misc/example_audio/voices/speed-pitch/speed-pitch-ken-normal.wav" />
+              </div>
+              <div>
+                <p className="font-semibold mb-1">High Speed</p>
+                <audio controls src="https://murf.ai/public-assets/misc/example_audio/voices/speed-pitch/speed-ken-fast.wav" />
+              </div>
+              <div>
+                <p className="font-semibold mb-1">Low Pitch</p>
+                <audio controls src="https://murf.ai/public-assets/misc/example_audio/voices/speed-pitch/pitch-ken-low.wav" />
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* Code Playground */}
+        <section>
+          <h2 className={`text-3xl font-bold mb-6 ${accentText}`}>Code Playground</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white rounded-2xl shadow-lg border-2 border-indigo-200 p-6">
+              <span className="inline-block bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">Python</span>
+              <h3 className="font-semibold mb-2">Python Example</h3>
+              <pre className="bg-gray-100 p-4 rounded text-xs overflow-x-auto"><code>{`from murf import Murf\nclient = Murf()\nres = client.text_to_speech.generate(\n    text=\"What color is the sky?\",\n    voice_id=\"en-US-ariana\",\n)`}</code></pre>
+            </div>
+            <div className="bg-white rounded-2xl shadow-lg border-2 border-yellow-200 p-6">
+              <span className="inline-block bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">Javascript</span>
+              <h3 className="font-semibold mb-2">Javascript Example</h3>
+              <pre className="bg-gray-100 p-4 rounded text-xs overflow-x-auto"><code>{`import axios from \"axios\";\nconst data = {\n  text: \"¡Ay, mi amor! ¡Ay, mi amor!\",\n  voiceId: \"es-MX-valeria\",\n};\naxios.post(\"https://api.murf.ai/v1/speech/generate\", data, { headers: { \"Content-Type\": \"application/json\", Accept: \"application/json\", \"api-key\": process.env.MURF_API_KEY, }, }).then((response) => { console.log(response.data.audioFile); });`}</code></pre>
+            </div>
+            <div className="bg-white rounded-2xl shadow-lg border-2 border-pink-200 p-6 md:col-span-2">
+              <span className="inline-block bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">cURL</span>
+              <h3 className="font-semibold mb-2">cURL Example</h3>
+              <pre className="bg-gray-100 p-4 rounded text-xs overflow-x-auto"><code>{`curl -X POST https://api.murf.ai/v1/speech/generate \\\n     -H \"api-key: $MURF_API_KEY\" \\\n     -H \"Content-Type: application/json\" \\\n     -d '{\n  \"text\": \"du sagst mir, dass es rot ist\",\n  \"voiceId\": \"de-DE-matthias\"\n}'`}</code></pre>
+            </div>
+          </div>
+        </section>
+        {/* FAQ */}
+        <section>
+          <h2 className={`text-3xl font-bold mb-6 ${accentText}`}>FAQ</h2>
+          <div className="space-y-4">
+            {faqs.map((faq, idx) => (
+              <div key={faq.q} className="bg-white rounded-xl shadow p-4 border-l-4 border-indigo-300">
+                <button className="w-full text-left font-semibold text-indigo-700 flex justify-between items-center" onClick={() => setOpenFaq(openFaq === idx ? null : idx)}>
+                  {faq.q}
+                  <span>{openFaq === idx ? '-' : '+'}</span>
+                </button>
+                {openFaq === idx && <div className="mt-2 text-gray-700">{faq.a}</div>}
               </div>
             ))}
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
-}
-
-export default Examples; 
+} 

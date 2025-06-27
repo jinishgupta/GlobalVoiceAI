@@ -31,11 +31,11 @@ function Header() {
         <div className="flex gap-2">
           {isAuthenticated ? (
             <>
-              <Link to="/dashboard" className="border border-primary text-white bg-primary px-4 py-2 rounded hover:bg-secondary hover:border-secondary hover:text-white transition">Dashboard</Link>
-              <button onClick={handleLogout} className="border border-secondary text-secondary px-4 py-2 rounded hover:bg-secondary hover:text-white transition">Logout</button>
+              <Link to="/dashboard" className="border border-primary text-white bg-primary px-4 py-2 rounded-lg hover:bg-secondary hover:border-secondary hover:text-white transition">Dashboard</Link>
+              <button onClick={handleLogout} className="border border-secondary text-secondary px-4 py-2 rounded-lg hover:bg-secondary hover:text-white transition">Logout</button>
             </>
           ) : (
-            <Link to="/login" className="border border-primary text-primary px-4 py-2 rounded hover:bg-primary hover:text-white transition">Login</Link>
+            <Link to="/login" className="border border-primary text-primary px-4 py-2 rounded-lg hover:bg-primary hover:text-white transition">Login</Link>
           )}
         </div>
       </div>

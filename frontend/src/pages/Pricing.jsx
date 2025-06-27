@@ -79,7 +79,7 @@ function Pricing() {
   return (
     <div className="bg-gray-50 text-gray-800">
       {/* Hero Section */}
-      <div className="text-center py-20 px-4 bg-white">
+      <div className="text-center py-20 px-4">
         <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-4">
           Find the Perfect Plan
         </h1>

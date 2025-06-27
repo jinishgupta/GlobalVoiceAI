@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 const features = [
   {
     icon: (
@@ -45,14 +43,7 @@ const features = [
   },
 ];
 
-const demoVoices = [
-  { name: 'Sophia (English)', style: 'Warm', color: 'primary' },
-  { name: 'Carlos (Spanish)', style: 'Energetic', color: 'secondary' },
-  { name: 'Akira (Japanese)', style: 'Professional', color: 'primary' },
-];
-
 function Features() {
-  const [selectedVoice, setSelectedVoice] = useState(0);
   return (
     <div className="bg-base-bg min-h-screen py-20 px-4">
       <div className="max-w-6xl mx-auto">

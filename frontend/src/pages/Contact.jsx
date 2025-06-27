@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import contact from '../assets/contact.jpg';
 import { faEnvelope, faPhone, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 
 function Contact() {
@@ -9,7 +10,7 @@ function Contact() {
         <div className="absolute inset-0">
           <img 
             className="w-full h-full object-cover opacity-30" 
-            src="https://picsum.photos/seed/contact/1920/1080" 
+            src={contact}
             alt="Global connections" 
           />
         </div>
