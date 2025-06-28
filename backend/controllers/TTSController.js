@@ -4,13 +4,18 @@ import TTSJob from '../models/ttsJob.js';
 dotenv.config();
 
 const getTTS = async(req, res) => {
-    const {text, voiceId, style} = req.body;
+    const {text, voiceId, style, rate, pitch, variation, multiNativeLocale, pronunciationDictionary} = req.body;
     const url = 'https://api.murf.ai/v1/speech/generate';
     const data = {
       text,
       voiceId,
       style
     };
+    if (typeof rate === 'number' && rate >= -50 && rate <= 50) data.rate = rate;
+    if (typeof pitch === 'number' && pitch >= -50 && pitch <= 50) data.pitch = pitch;
+    if (typeof variation === 'number' && variation >= 0 && variation <= 5) data.variation = variation;
+    if (multiNativeLocale) data.multiNativeLocale = multiNativeLocale;
+    if (pronunciationDictionary) data.pronunciationDictionary = pronunciationDictionary;
 
     try {
       const response = await axios.post(url, data, {
@@ -45,7 +50,7 @@ const getVoices = async(req, res) => {
 const createTTSJobWithTranslation = async (req, res) => {
   console.log('Creating TTS+Translate job with data:', req.body);
   try {
-    const { projectName, script, sourceLocale, targetLocale, audioUrl, transcript  } = req.body;
+    const { projectName, script, sourceLocale, targetLocale, audioUrl, transcript, voiceId, style, rate, pitch, variation, multiNativeLocale, pronunciationDictionary } = req.body;
     const userId = req.user?._id;
     if (!projectName || !script || !targetLocale) {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
@@ -61,7 +66,16 @@ const createTTSJobWithTranslation = async (req, res) => {
       targetLocale,
       ttsAudioUrl: audioUrl,
       status: 'COMPLETED',
+      // --- TTS Customization Options ---
+      voiceId,
+      style
     };
+    if (typeof rate === 'number' && rate >= -50 && rate <= 50) jobData.rate = rate;
+    if (typeof pitch === 'number' && pitch >= -50 && pitch <= 50) jobData.pitch = pitch;
+    if (typeof variation === 'number' && variation >= 0 && variation <= 5) jobData.variation = variation;
+    if (multiNativeLocale) jobData.multiNativeLocale = multiNativeLocale;
+    if (pronunciationDictionary) jobData.pronunciationDictionary = pronunciationDictionary;
+    // --- End TTS Customization Options ---
     const newJob = new TTSJob(jobData);
     await newJob.save();
     console.log('TTS+Translate job created:', newJob);

@@ -151,7 +151,7 @@ const Dashboard = () => {
         <header className="mb-10">
           <h1 className="text-3xl font-bold text-gray-900 mb-1">Dashboard</h1>
           <p className="text-gray-500">Welcome back, {user?.userName || 'User'}! Here's a snapshot of your activity.</p>
-        </header>
+         </header>
 
         {/* Stats Cards */}
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">

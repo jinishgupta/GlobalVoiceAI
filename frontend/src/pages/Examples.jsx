@@ -46,26 +46,6 @@ export default function Examples() {
         </div>
       </div>
       <div className="max-w-5xl mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16">
-        {/* Voice Changer Before & After */}
-        <section>
-          <h2 className={`text-3xl font-bold mb-6 ${accentText}`}>Voice Changer: Before & After</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-2xl shadow-lg border-2 border-indigo-200 p-6">
-              <span className="inline-block bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">Female Voice</span>
-              <h3 className="font-semibold mb-2">Original Audio</h3>
-              <audio controls src="https://murf.ai/public-assets/misc/example_audio/voice_changer/women_original_voice.mp3" />
-              <h3 className="font-semibold mt-6 mb-2">Converted (With Retain Prosody)</h3>
-              <audio controls src="https://murf.ai/public-assets/misc/example_audio/voice_changer/women_simw_voice.mp3" />
-            </div>
-            <div className="bg-white rounded-2xl shadow-lg border-2 border-violet-200 p-6">
-              <span className="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">Male Voice</span>
-              <h3 className="font-semibold mb-2">Original Audio</h3>
-              <audio controls src="https://murf.ai/public-assets/misc/example_audio/voice_changer/man_original_voice.mp3" />
-              <h3 className="font-semibold mt-6 mb-2">Converted (With Retain Prosody & Accent)</h3>
-              <audio controls src="https://murf.ai/public-assets/misc/example_audio/voice_changer/man_VC.mp3" />
-            </div>
-          </div>
-        </section>
         {/* Speech Customization Gallery */}
         <section>
           <h2 className={`text-3xl font-bold mb-6 ${accentText}`}>Speech Customization Gallery</h2>
@@ -88,7 +68,7 @@ export default function Examples() {
               <div>
                 <p className="font-semibold mb-1">wound (before)</p>
                 <audio controls src="https://murf.ai/public-assets/Blog/2023/010223/SubBlock_Wound_before_P.mp3" />
-              </div>
+                </div>
               <div>
                 <p className="font-semibold mb-1">wound (after)</p>
                 <audio controls src="https://murf.ai/public-assets/Blog/2023/010223/Block_Wound.mp3" />
@@ -100,12 +80,12 @@ export default function Examples() {
               <div>
                 <p className="font-semibold mb-1">Without MultiNative Locale</p>
                 <audio controls src="https://murf.ai/public-assets/misc/example_audio/voices/multi-native/natalie-croissant-en-US.wav" />
-              </div>
-              <div>
+                  </div>
+                  <div>
                 <p className="font-semibold mb-1">With MultiNative Locale</p>
                 <audio controls src="https://murf.ai/public-assets/misc/example_audio/voices/multi-native/natalie-croissant-fr-FR.wav" />
-              </div>
-            </div>
+                  </div>
+                </div>
             {/* Speed & Pitch Card */}
             <div className="bg-white rounded-2xl shadow-lg border-2 border-purple-200 p-6 flex flex-col gap-6">
               <span className="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">Speed & Pitch</span>
@@ -142,8 +122,8 @@ export default function Examples() {
               <span className="inline-block bg-pink-100 text-pink-700 px-3 py-1 rounded-full text-xs font-semibold mb-2">cURL</span>
               <h3 className="font-semibold mb-2">cURL Example</h3>
               <pre className="bg-gray-100 p-4 rounded text-xs overflow-x-auto"><code>{`curl -X POST https://api.murf.ai/v1/speech/generate \\\n     -H \"api-key: $MURF_API_KEY\" \\\n     -H \"Content-Type: application/json\" \\\n     -d '{\n  \"text\": \"du sagst mir, dass es rot ist\",\n  \"voiceId\": \"de-DE-matthias\"\n}'`}</code></pre>
-            </div>
-          </div>
+        </div>
+      </div>
         </section>
         {/* FAQ */}
         <section>
@@ -163,4 +143,4 @@ export default function Examples() {
       </div>
     </div>
   );
-} 
+}

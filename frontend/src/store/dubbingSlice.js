@@ -27,7 +27,7 @@ export const dubWithJob = createAsyncThunk(
     formData.append("file", file);
 
     const response = await axios.post(
-      "http://localhost:5000/api/dubbing/create",
+      "https://globalvoiceai-backend.onrender.com/api/dubbing/create",
       formData,
       { withCredentials: true }
     );
@@ -40,7 +40,7 @@ export const fetchUserJobs = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        'http://localhost:5000/api/dubbing/jobs',
+        'https://globalvoiceai-backend.onrender.com/api/dubbing/jobs',
         { withCredentials: true }
       );
       return response.data;
@@ -56,7 +56,7 @@ export const getStatus = createAsyncThunk(
     try {
       console.log("Fetching status from backend...");
       const response = await axios.get(
-        `http://localhost:5000/api/dubbing/status/${jobId}`,
+        `https://globalvoiceai-backend.onrender.com/api/dubbing/status/${jobId}`,
         { withCredentials: true }
       );
       return response.data;
@@ -70,7 +70,7 @@ export const fetchJobById = createAsyncThunk(
   'dubbing/fetchJobById',
   async (jobId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/dubbing/job/${jobId}`, { withCredentials: true });
+      const response = await axios.get(`https://globalvoiceai-backend.onrender.com/api/dubbing/job/${jobId}`, { withCredentials: true });
       return response.data.job;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Network Error');

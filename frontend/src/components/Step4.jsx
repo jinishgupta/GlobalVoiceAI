@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
-function Step4({ mode, script, uploadedFile, selectedLanguages, projectName, originalLang, handleSubmit,selectedLanguage }) {
+function Step4({ mode, script, uploadedFile, selectedLanguages, projectName, originalLang, handleSubmit, selectedLanguage, voiceId, style, rate, pitch, variation, multiNativeLocale, pronunciationDictionary }) {
     return (
         <div>
             {/* Locked mode display */}
@@ -61,6 +61,34 @@ function Step4({ mode, script, uploadedFile, selectedLanguages, projectName, ori
                         <div className="flex justify-between items-center pb-4 border-b">
                         <p className="font-semibold text-gray-700">Target Language:</p>
                         <p className="text-gray-800">{selectedLanguage || <span className='italic text-gray-400'>Not set</span>}</p>
+                    </div>
+                        <div className="flex justify-between items-center pb-4 border-b">
+                        <p className="font-semibold text-gray-700">Voice ID:</p>
+                        <p className="text-gray-800">{voiceId || <span className='italic text-gray-400'>Not set</span>}</p>
+                    </div>
+                        <div className="flex justify-between items-center pb-4 border-b">
+                        <p className="font-semibold text-gray-700">Style:</p>
+                        <p className="text-gray-800">{style || <span className='italic text-gray-400'>Not set</span>}</p>
+                    </div>
+                        <div className="flex justify-between items-center pb-4 border-b">
+                        <p className="font-semibold text-gray-700">Rate (Speed):</p>
+                        <p className="text-gray-800">{rate !== undefined ? rate : <span className='italic text-gray-400'>Not set</span>}</p>
+                    </div>
+                        <div className="flex justify-between items-center pb-4 border-b">
+                        <p className="font-semibold text-gray-700">Pitch:</p>
+                        <p className="text-gray-800">{pitch !== undefined ? pitch : <span className='italic text-gray-400'>Not set</span>}</p>
+                    </div>
+                        <div className="flex justify-between items-center pb-4 border-b">
+                        <p className="font-semibold text-gray-700">Variation:</p>
+                        <p className="text-gray-800">{variation !== undefined ? variation : <span className='italic text-gray-400'>Not set</span>}</p>
+                    </div>
+                        <div className="flex justify-between items-center pb-4 border-b">
+                        <p className="font-semibold text-gray-700">MultiNative Locale:</p>
+                        <p className="text-gray-800">{multiNativeLocale || <span className='italic text-gray-400'>Not set</span>}</p>
+                    </div>
+                        <div className="flex flex-col pb-4 border-b">
+                        <p className="font-semibold text-gray-700">Pronunciation Dictionary:</p>
+                        <pre className="bg-gray-100 rounded p-2 text-xs text-gray-700 whitespace-pre-wrap">{pronunciationDictionary || <span className='italic text-gray-400'>Not set</span>}</pre>
                     </div>
                         </>)}
                 </div>

@@ -17,14 +17,27 @@ const initialState = {
 
 export const getTTS = createAsyncThunk(
   'tts/getTTS',
-  async ({ text, voiceId, style }) => {
+  async ({ text, voiceId, style, rate, pitch, variation, multiNativeLocale, pronunciationDictionary }) => {
     try {
+      const payload = {
+        text,
+        voiceId,
+        style,
+        rate,
+        pitch,
+        variation,
+        multiNativeLocale,
+        pronunciationDictionary
+      };
+      // Remove undefined or empty values
+      Object.keys(payload).forEach(key => (payload[key] === undefined || payload[key] === '' || payload[key] === null) && delete payload[key]);
       const response = await axios.post(
-        "http://localhost:5000/api/tts",
-        { text, voiceId, style },
-    {
-        withCredentials: true,
-    });
+        "https://globalvoiceai-backend.onrender.com/api/tts",
+        payload,
+        {
+          withCredentials: true,
+        }
+      );
       return response.data;
     } catch (error) {
       console.error('Error fetching TTS:', error);
@@ -37,10 +50,11 @@ export const getVoices = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/voices", 
+        "https://globalvoiceai-backend.onrender.com/api/voices", 
     {
         withCredentials: true,
       });
+      console.log('Fetched voices:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching voices:', error);
@@ -54,7 +68,7 @@ export const saveTTSProject = createAsyncThunk(
     async ({projectName, script, sourceLocale, targetLocale, audioUrl, transcript}) => {
         console.log("Saving project with data:");
       const response = await axios.post(
-        "http://localhost:5000/api/tts-translate-project",
+        "https://globalvoiceai-backend.onrender.com/api/tts-translate-project",
         {projectName, script, sourceLocale, targetLocale, audioUrl, transcript},
         {
           withCredentials: true,
@@ -69,7 +83,7 @@ export const getUserTTSJobs = createAsyncThunk(
   'tts/getUserTTSJobs',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/tts-jobs', { withCredentials: true });
+      const response = await axios.get('https://globalvoiceai-backend.onrender.com/api/tts-jobs', { withCredentials: true });
       return response.data.jobs;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Network Error');

@@ -1,7 +1,7 @@
 import express from 'express';
 import { getTTS, getVoices, createTTSJobWithTranslation, getUserTTSJobs } from './controllers/TTSController.js';
 import { getTranslate } from './controllers/TranslateController.js';
-import { registerUser, loginUser ,logoutUser, authMiddleware, getProfile, updateProfile, changePassword } from './controllers/authController.js';
+import { registerUser, loginUser ,logoutUser, authMiddleware, getProfile, updateProfile, changePassword, googleLogin, verifyEmail } from './controllers/authController.js';
 import { dubWithJob, getUserJobs, getJobStatus, getJobById } from './controllers/DubbingController.js';
 import multer from 'multer';
 import { upload } from './cloudinary.js';
@@ -26,6 +26,8 @@ router.get('/dubbing/job/:jobId', authMiddleware, getJobById);
 router.post('/signup', registerUser);
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);
+router.post('/google-login', googleLogin);
+router.get('/verify', verifyEmail);
 router.get('/check-auth', authMiddleware, (req, res) => {
     res.json({
         success: true,

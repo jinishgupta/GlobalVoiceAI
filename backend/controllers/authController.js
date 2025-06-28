@@ -1,7 +1,36 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import User from '../models/user.js'
+import {OAuth2Client} from 'google-auth-library'
 import { imageUploadUtil } from '../cloudinary.js'
+import nodemailer from 'nodemailer'
+import dotenv from 'dotenv'
+dotenv.config()
+
+
+// Nodemailer setup
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+})
+
+// Send verification email
+const sendVerificationEmail = (email, token) => {
+  const link = `${process.env.CLIENT_URL}/api/verify?token=${token}`
+  const mailOptions = {
+    from: `GlobalVoiceAI <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: 'Verify Your Email',
+    html: `<h3>Click <a href="${link}">here</a> to verify your email and complete signup.</h3>`
+  }
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) console.log(err)
+    else console.log('Verification email sent:', info.response)
+  })
+}
 
 //register
 const registerUser = async (req, res) => {
@@ -31,19 +60,13 @@ const registerUser = async (req, res) => {
                 message: "User already exists with same email"
             });
         }
-
         const hashPassword = await bcrypt.hash(password,12);
-        const newUser = new User({
-            userName,
-            email,
-            password: hashPassword
-        });
-        await newUser.save();
+        const token = jwt.sign({ userName, email, password: hashPassword }, 'CLIENT_SECRET_KEY', { expiresIn: '15m' });
+        sendVerificationEmail(email, token);
         res.status(200).json({
             success: true,
-            message: "Registration successful"
+            message: "Verification email sent. Check your inbox to complete signup."
         });
-
     } catch(e) {
         console.error("Registration error:", e);
         const errorMessage = e.message || "Some error occurred";
@@ -51,6 +74,26 @@ const registerUser = async (req, res) => {
             success: false,
             message: errorMessage
         });
+    }
+}
+
+// Email verification route handler
+const verifyEmail = async (req, res) => {
+    const { token } = req.query;
+    if (!token) return res.status(400).send("Invalid token");
+    try {
+        const decoded = jwt.verify(token, 'CLIENT_SECRET_KEY');
+        const { userName, email, password } = decoded;
+        const exists = await User.findOne({ email });
+        if (exists) return res.send("Account already verified. Please login.");
+        console.log("saving new user:", { userName, email, password });
+        const newUser = new User({ userName, email, password });
+        await newUser.save();
+        console.log("New user saved:", newUser);
+        res.status(200).send("Email verified successfully. You can now login.");
+    } catch (err) {
+        console.log(err);
+        res.status(400).send("Invalid or expired token");
     }
 }
 
@@ -75,7 +118,12 @@ const loginUser = async (req, res) => {
             });
         }
         const token = jwt.sign({ id: user._id, email: user.email, userName: user.userName}, 'CLIENT_SECRET_KEY', { expiresIn: '240m' });
-        res.cookie('token', token, { httpOnly: true, secure: false }).json({
+        res.cookie('token', token, { 
+            httpOnly: true, 
+            secure: true,
+            sameSite: 'none',
+            maxAge: 240 * 60 * 1000 // 240 minutes
+        }).json({
             success: true,
             message: "Login successful",
             user: {
@@ -99,7 +147,11 @@ const loginUser = async (req, res) => {
 const logoutUser = async (req, res) => {
     try {
         console.log("Logging out user");
-        res.clearCookie('token').json({
+        res.clearCookie('token', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none'
+        }).json({
             success: true,
             message: "Logout successful"
         });
@@ -111,6 +163,64 @@ const logoutUser = async (req, res) => {
         });
     }
 }
+
+// sign in with google
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+const googleLogin = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    // 1. Verify Google token
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, sub: googleId, picture } = payload;
+
+    // 2. Find or create user
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = await User.create({
+        email,
+        userName: name,
+        googleId,
+        profilePic: picture
+      });
+    }
+
+    // 3. Create your own JWT
+    const jwtToken = jwt.sign({
+      id: user._id,
+      email: user.email,
+      userName: user.userName
+    }, 'CLIENT_SECRET_KEY', { expiresIn: '6h' });
+
+    // 4. Send HTTP-only cookie
+    res.cookie('token', jwtToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 6 * 60 * 60 * 1000 // 6 hours
+    }).json({
+      success: true,
+      message: "Google login successful",
+      user: {
+        email: user.email,
+        id: user._id,
+        userName: user.userName
+      }
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(401).json({ success: false, message: "Invalid Google token" });
+  }
+};
+
 
 //middleware
 
@@ -180,4 +290,4 @@ const changePassword = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser , logoutUser , authMiddleware, getProfile, updateProfile, changePassword };
+export { registerUser, loginUser , logoutUser , authMiddleware, getProfile, updateProfile, changePassword, googleLogin, verifyEmail };

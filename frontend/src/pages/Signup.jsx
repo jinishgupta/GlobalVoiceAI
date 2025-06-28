@@ -1,28 +1,32 @@
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle, faApple } from '@fortawesome/free-brands-svg-icons';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {registerUser} from '../store/authSlice.js'
 import { useState } from 'react';
+import GoogleLoginButton from '../components/GoogleLoginButton.jsx';
 
 function Signup() {
   const [form, setForm] = useState({userName: '', email: '', password: ''});
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
     dispatch(registerUser(form))
-          .then(response => {
-        if (response.payload.success) {
-          navigate('/login');
+      .then(response => {
+        if (response.payload && response.payload.success) {
+          setSuccessMessage(response.payload.message || 'Verification email sent. Please check your inbox.');
         } else {
-          alert('Registration failed. Please try again.');
+          setErrorMessage(response.payload?.message || 'Registration failed. Please try again.');
         }
       })
       .catch(error => {
         console.error('Registration error:', error);
-        alert('An error occurred during registration. Please try again.');
+        setErrorMessage('An error occurred during registration. Please try again.');
       });
   }
 
@@ -52,89 +56,100 @@ function Signup() {
               Already have an account? <Link to="/login" className="font-semibold text-vibrant-blue hover:text-vibrant-orange transition-colors">Sign in</Link>
             </p>
 
-            <form className="space-y-6" onSubmit={handleSubmit}>
-               <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
-                  Username
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="userName"
-                    name="userName"
-                    type="text"
-                    autoComplete="name"
-                    required
-                    className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-vibrant-blue focus:border-vibrant-blue sm:text-sm"
-                    placeholder="AlexDoe17"
-                    onChange={(e) => setForm({...form, userName: e.target.value})}
-                  />
+            {successMessage ? (
+              <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 text-center">
+                {successMessage}
+                <div className="mt-4">
+                  <button
+                    className="bg-vibrant-blue text-white px-4 py-2 rounded hover:bg-vibrant-orange transition-colors"
+                    onClick={() => navigate('/login')}
+                  >
+                    Go to Login
+                  </button>
                 </div>
               </div>
-              
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-vibrant-blue focus:border-vibrant-blue sm:text-sm"
-                    placeholder="you@example.com"
-                    onChange={(e) => setForm({...form, email: e.target.value})}
-                  />
+            ) : (
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                {errorMessage && (
+                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-center">
+                    {errorMessage}
+                  </div>
+                )}
+                <div>
+                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
+                    Username
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      id="userName"
+                      name="userName"
+                      type="text"
+                      autoComplete="name"
+                      required
+                      className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-vibrant-blue focus:border-vibrant-blue sm:text-sm"
+                      placeholder="AlexDoe17"
+                      onChange={(e) => setForm({...form, userName: e.target.value})}
+                    />
+                  </div>
                 </div>
-              </div>
-
-              <div>
-                <label htmlFor="password"className="block text-sm font-medium text-gray-700">
-                  Password
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="new-password"
-                    required
-                    className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-vibrant-blue focus:border-vibrant-blue sm:text-sm"
-                    placeholder="Minimum 8 characters"
-                    onChange={(e) => setForm({...form, password: e.target.value})}
-                  />
+                
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Email
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-vibrant-blue focus:border-vibrant-blue sm:text-sm"
+                      placeholder="you@example.com"
+                      onChange={(e) => setForm({...form, email: e.target.value})}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <button
-                  type="submit"
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-lg font-semibold text-white bg-gradient-to-r from-vibrant-blue to-teal-500 hover:from-vibrant-orange hover:to-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vibrant-blue transition-all transform hover:scale-105"
-                >
-                  Create Account
-                </button>
-              </div>
-            </form>
+                <div>
+                  <label htmlFor="password"className="block text-sm font-medium text-gray-700">
+                    Password
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete="new-password"
+                      required
+                      className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-vibrant-blue focus:border-vibrant-blue sm:text-sm"
+                      placeholder="Minimum 8 characters"
+                      onChange={(e) => setForm({...form, password: e.target.value})}
+                    />
+                  </div>
+                </div>
 
+                <div>
+                  <button
+                    type="submit"
+                    className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-lg font-semibold text-white bg-gradient-to-r from-vibrant-blue to-teal-500 hover:from-vibrant-orange hover:to-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vibrant-blue transition-all transform hover:scale-105"
+                  >
+                    Create Account
+                  </button>
+                </div>
+              </form>
+            )}
             <div className="mt-8 relative">
               <div className="absolute inset-0 flex items-center" aria-hidden="true">
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white bg-opacity-80 text-gray-500">Or sign up with</span>
+                <span className="px-2 bg-white bg-opacity-80 text-gray-500">OR</span>
               </div>
             </div>
             
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <button className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors group">
-                <FontAwesomeIcon icon={faGoogle} className="w-5 h-5 mr-2 text-red-500 group-hover:text-red-600" />
-                Google
-              </button>
-              <button className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors group">
-                <FontAwesomeIcon icon={faApple} className="w-5 h-5 mr-2 text-black group-hover:text-gray-800" />
-                Apple
-              </button>
+            <div className="mt-6 flex justify-center gap-4">
+              <GoogleLoginButton />
             </div>
           </div>
         </div>

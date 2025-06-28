@@ -14,7 +14,7 @@ export const getTranslate = createAsyncThunk(
     async ({ text, targetLanguage }) => {
         try {
             const response = await axios.post(
-                "http://localhost:5000/api/translate",
+                "https://globalvoiceai-backend.onrender.com/api/translate",
                 { text, targetLanguage },
                 { withCredentials: true }
             );

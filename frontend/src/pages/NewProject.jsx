@@ -54,6 +54,11 @@ function NewProject() {
   const [ttsLoading, setTtsLoading] = useState(false);
   const [ttsError, setTtsError] = useState('');
   const [audioUrl, setAudioUrl] = useState(null);
+  const [rate, setRate] = useState(0);
+  const [pitch, setPitch] = useState(0);
+  const [variation, setVariation] = useState(1);
+  const [multiNativeLocale, setMultiNativeLocale] = useState('');
+  const [pronunciationDictionary, setPronunciationDictionary] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
@@ -98,22 +103,58 @@ function NewProject() {
         alert('Failed to create dubbing job. Please try again.');
       }
     } else if (mode === "script" && script) {
-      console.log("script mode ");
       setTtsLoading(true);
       setTtsError('');
       setAudioUrl(null);
       try {
-        const data = await dispatch(getTTS({ text: script, voiceId, style }));
-        console.log("TTS data received:", data);
+        // Parse pronunciationDictionary if provided
+        let parsedPronDict = undefined;
+        if (pronunciationDictionary && pronunciationDictionary.trim() !== '') {
+          try {
+            parsedPronDict = JSON.parse(pronunciationDictionary);
+          } catch (e) {
+            setTtsLoading(false);
+            setTtsError('Invalid pronunciation dictionary JSON.');
+            return;
+          }
+        }
+        const ttsPayload = {
+          text: script,
+          voiceId,
+          style,
+          rate,
+          pitch,
+          variation,
+          multiNativeLocale: multiNativeLocale || undefined,
+          pronunciationDictionary: parsedPronDict
+        };
+        // Remove undefined fields
+        Object.keys(ttsPayload).forEach(key => ttsPayload[key] === undefined && delete ttsPayload[key]);
+        const data = await dispatch(getTTS(ttsPayload));
         const response = await dispatch(getTranslate({ text: script, targetLanguage: selectedLanguage }));
-        console.log("Translation data received:", response);
         setTtsLoading(false);
         if (data && data.payload && data.payload.audioFile) {
           const safeSourceLocale = originalLang ? originalLang : 'Auto-Detect';
-          dispatch(saveTTSProject({ projectName, script, sourceLocale: safeSourceLocale, targetLocale: selectedLanguage, transcript: response.payload.translations[0].translated_text, audioUrl: data.payload.audioFile }))
+          const savePayload = {
+            projectName,
+            script,
+            sourceLocale: safeSourceLocale,
+            targetLocale: selectedLanguage,
+            transcript: response.payload.translations[0].translated_text,
+            audioUrl: data.payload.audioFile,
+            voiceId,
+            style,
+            rate,
+            pitch,
+            variation,
+            multiNativeLocale: multiNativeLocale || undefined,
+            pronunciationDictionary: parsedPronDict
+          };
+          Object.keys(savePayload).forEach(key => savePayload[key] === undefined && delete savePayload[key]);
+          dispatch(saveTTSProject(savePayload))
           .then((res) => {
-            console.log('Project saved successfully:', res);
-            navigate('/dashboard')});
+            navigate('/dashboard')
+          });
         } else {
           setTtsError('Failed to generate audio. Please try again.');
         }
@@ -184,6 +225,16 @@ function NewProject() {
             setSelectedLanguage={setSelectedLanguage}
             selectedGender={selectedGender}
             setSelectedGender={setSelectedGender}
+            rate={rate}
+            setRate={setRate}
+            pitch={pitch}
+            setPitch={setPitch}
+            variation={variation}
+            setVariation={setVariation}
+            multiNativeLocale={multiNativeLocale}
+            setMultiNativeLocale={setMultiNativeLocale}
+            pronunciationDictionary={pronunciationDictionary}
+            setPronunciationDictionary={setPronunciationDictionary}
           />
         );
       case 3: // Review & Create
@@ -197,6 +248,13 @@ function NewProject() {
             originalLang={originalLang}
             handleSubmit={handleSubmit}
             selectedLanguage={selectedLanguage}
+            voiceId={voiceId}
+            style={style}
+            rate={rate}
+            pitch={pitch}
+            variation={variation}
+            multiNativeLocale={multiNativeLocale}
+            pronunciationDictionary={pronunciationDictionary}
           />
         );
       default:

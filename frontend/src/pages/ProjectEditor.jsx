@@ -69,6 +69,11 @@ function AudioWaveform({ audioUrl }) {
     return <div ref={waveformRef} className="w-full h-12 mb-2" />;
 }
 
+// Utility to check if file is video
+function isVideoFile(filename) {
+    return filename && filename.toLowerCase().endsWith('.mp4');
+}
+
 function ProjectEditor() {
     const { jobId } = useParams();
     const dispatch = useDispatch();
@@ -173,12 +178,14 @@ function ProjectEditor() {
                                     <span className="ml-auto text-xs text-gray-400">{/* Placeholder for duration */}</span>
                                 </div>
                                 {/* Audio waveform placeholder */}
-                                {detail.cloudinaryUrl && (
-                                    <AudioWaveform audioUrl={detail.cloudinaryUrl} />
-                                )}
-                                {detail.cloudinaryUrl && (
-                                    <audio controls src={detail.cloudinaryUrl} className="w-full max-w-xs mb-2" />
-                                )}
+                                {detail.cloudinaryUrl && isVideoFile(currentJob.originalFile) ? (
+                                    <video controls src={detail.cloudinaryUrl} className="w-full max-w-xs mb-2 rounded" />
+                                ) : detail.cloudinaryUrl ? (
+                                    <>
+                                        <AudioWaveform audioUrl={detail.cloudinaryUrl} />
+                                        <audio controls src={detail.cloudinaryUrl} className="w-full max-w-xs mb-2" />
+                                    </>
+                                ) : null}
                                 <div className="flex flex-wrap gap-2">
                                     {detail.downloadUrl && (
                                         <a href={detail.downloadUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-1 bg-vibrant-blue text-white rounded hover:bg-vibrant-orange transition-colors text-sm" title="Download original audio">

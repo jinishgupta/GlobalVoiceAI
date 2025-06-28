@@ -19,7 +19,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://globalvoiceai.onrender.com",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders : ["Content-Type", "Authorization", "Cache-Control", "Expires ", "Pragma"],  
   credentials: true
@@ -30,5 +30,5 @@ app.use(cookieParser());
 app.use('/api', router);
 
 app.listen(PORT, () => {
-  console.log(`LinguaAid backend running on port ${PORT}`);
+  console.log(`GlobalVoice AI backend running on port ${PORT}`);
 });

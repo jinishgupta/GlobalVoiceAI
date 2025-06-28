@@ -14,7 +14,7 @@ const ProjectCard = ({ project }) => {
             return { text: 'Processing', color: 'bg-gradient-to-r from-blue-400 to-indigo-500 text-white' };
           case 'PENDING':
             return { text: 'Pending', color: 'bg-gradient-to-r from-gray-400 to-gray-600 text-white' };
-          case 'QUEUED':
+            case 'QUEUED':
             return { text: 'Queued', color: 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-white' };
           default:
             return { text: 'Failed', color: 'bg-gradient-to-r from-red-400 to-red-600 text-white' };
@@ -271,11 +271,11 @@ const Projects = () => {
                         </div>
                     ) : (
                         view === 'grid' ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {filteredTTSJobs.map(job => (
-                                    <TTSProjectCard key={job.jobId} job={job} />
-                                ))}
-                            </div>
+                                <TTSProjectCard key={job.jobId} job={job} />
+                            ))}
+                        </div>
                         ) : (
                             <div className="bg-white rounded-lg shadow-sm overflow-hidden border">
                                 <ul className="divide-y divide-gray-200">

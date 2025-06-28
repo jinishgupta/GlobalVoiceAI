@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle, faApple } from '@fortawesome/free-brands-svg-icons';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../store/authSlice.js';
 import { useState } from 'react';
+import GoogleLoginButton from '../components/GoogleLoginButton.jsx';
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -113,25 +112,17 @@ function Login() {
                 </button>
               </div>
             </form>
-
             <div className="mt-8 relative">
               <div className="absolute inset-0 flex items-center" aria-hidden="true">
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white bg-opacity-80 text-gray-500">Or continue with</span>
+                <span className="px-2 bg-white bg-opacity-80 text-gray-500">OR</span>
               </div>
             </div>
             
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <button className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors group">
-                <FontAwesomeIcon icon={faGoogle} className="w-5 h-5 mr-2 text-red-500 group-hover:text-red-600" />
-                Google
-              </button>
-              <button className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors group">
-                <FontAwesomeIcon icon={faApple} className="w-5 h-5 mr-2 text-black group-hover:text-gray-800" />
-                Apple
-              </button>
+            <div className="mt-6 flex justify-center gap-4">
+              <GoogleLoginButton />
             </div>
           </div>
         </div>

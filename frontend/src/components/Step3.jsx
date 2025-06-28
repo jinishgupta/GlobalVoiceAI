@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { getVoices } from '../store/ttsSlice.js';
 
-function Step3({ mode, script, uploadedFile, selectedLanguages, setSelectedLanguages, voiceId, setVoiceId, style, setStyle, selectedLanguage, setSelectedLanguage, selectedGender, setSelectedGender }) {
+function Step3({ mode, script, uploadedFile, selectedLanguages, setSelectedLanguages, voiceId, setVoiceId, style, setStyle, selectedLanguage, setSelectedLanguage, selectedGender, setSelectedGender, rate, setRate, pitch, setPitch, variation, setVariation, multiNativeLocale, setMultiNativeLocale, pronunciationDictionary, setPronunciationDictionary }) {
 
     const [voices, setVoices] = useState([]);
     const [languages, setLanguages] = useState([]);
     const [genders, setGenders] = useState([]);
     const [styles, setStyles] = useState([]);
     const [voiceOptions, setVoiceOptions] = useState([]);
+    const [availableLocales, setAvailableLocales] = useState([]);
 
     const availableLanguages = [
         { name: 'Arabic', locale: 'ar_SA', flag: '🇸🇦' },
@@ -39,7 +40,7 @@ function Step3({ mode, script, uploadedFile, selectedLanguages, setSelectedLangu
         { name: 'Russian', locale: 'ru_RU', flag: '🇷🇺' },
         { name: 'Turkish', locale: 'tr_TR', flag: '🇹🇷' }
     ];
-
+ 
     const toggleLanguage = (lang) => {
         setSelectedLanguages(prev =>
             prev.some(l => l.locale === lang.locale)
@@ -105,9 +106,17 @@ function Step3({ mode, script, uploadedFile, selectedLanguages, setSelectedLangu
     const handleVoiceChange = (selectedVoiceId) => {
         setVoiceId(selectedVoiceId);
         setStyle('');
-
         const selectedVoice = voiceOptions.find(v => v.value === selectedVoiceId);
         setStyles(selectedVoice?.styles || []);
+        const voiceObj = voices.find(v => v.voiceId === selectedVoiceId);
+        
+        // Extract supported locales from the voice object
+        if (voiceObj && voiceObj.supportedLocales) {
+            const supportedLocales = Object.keys(voiceObj.supportedLocales);
+            setAvailableLocales(supportedLocales);
+        } else {
+            setAvailableLocales([]);
+        }
     };
 
     const handleStyleChange = (selectedStyle) => {
@@ -219,6 +228,71 @@ function Step3({ mode, script, uploadedFile, selectedLanguages, setSelectedLangu
                                 <option key={s} value={s}>{s}</option>
                             ))}
                         </select>
+                    </div><div className="flex flex-col">
+                        <label className="text-gray-700 font-medium mb-1 flex items-center gap-2">
+                            Rate (Speed)
+                        </label>
+                        <input
+                            type="number"
+                            min="-50"
+                            max="50"
+                            value={rate}
+                            onChange={e => setRate(Number(e.target.value))}
+                            className="border border-pink-200 rounded-lg p-2 w-32 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white/80 text-black"
+                            placeholder="0 (default)"
+                        />
+                    </div><div className="flex flex-col">
+                        <label className="text-gray-700 font-medium mb-1 flex items-center gap-2">
+                            Pitch
+                        </label>
+                        <input
+                            type="number"
+                            min="-50"
+                            max="50"
+                            value={pitch}
+                            onChange={e => setPitch(Number(e.target.value))}
+                            className="border border-pink-200 rounded-lg p-2 w-32 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white/80 text-black"
+                            placeholder="0 (default)"
+                        />
+                    </div><div className="flex flex-col">
+                        <label className="text-gray-700 font-medium mb-1 flex items-center gap-2">
+                            Variation
+                        </label>
+                        <input
+                            type="number"
+                            min="0"
+                            max="5"
+                            value={variation}
+                            onChange={e => setVariation(Number(e.target.value))}
+                            className="border border-pink-200 rounded-lg p-2 w-32 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white/80 text-black"
+                            placeholder="1 (default)"
+                        />
+                    </div><div className="flex flex-col">
+                        <label className="text-gray-700 font-medium mb-1 flex items-center gap-2">
+                            MultiNative Locale
+                        </label>
+                        <select
+                            className="border border-pink-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white/80 text-black"
+                            value={multiNativeLocale}
+                            onChange={e => setMultiNativeLocale(e.target.value)}
+                            disabled={!voiceId || availableLocales.length === 0}
+                        >
+                            <option value="">Select Locale</option>
+                            {availableLocales.map((loc) => (
+                                <option key={loc} value={loc}>{loc}</option>
+                            ))}
+                        </select>
+                    </div><div className="flex flex-col">
+                        <label className="text-gray-700 font-medium mb-1 flex items-center gap-2">
+                            Pronunciation Dictionary (JSON)
+                        </label>
+                        <textarea
+                            className="border border-pink-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white/80 text-black"
+                            value={pronunciationDictionary}
+                            onChange={e => setPronunciationDictionary(e.target.value)}
+                            placeholder='{"word": { "type": "IPA", "pronunciation": "laɪv" }}'
+                            rows={2}
+                        />
                     </div></>
             )}
         </div>

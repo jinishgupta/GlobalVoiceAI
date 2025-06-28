@@ -35,6 +35,15 @@ const ttsJobSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  // --- TTS Customization Options ---
+  voiceId: { type: String },
+  style: { type: String },
+  rate: { type: Number },
+  pitch: { type: Number },
+  variation: { type: Number },
+  multiNativeLocale: { type: String },
+  pronunciationDictionary: { type: mongoose.Schema.Types.Mixed },
+  // --- End TTS Customization Options ---
   status: {
     type: String,
     enum: ['PENDING', 'PROCESSING', 'COMPLETED', 'FAILED'],
